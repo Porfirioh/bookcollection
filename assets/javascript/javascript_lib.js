@@ -1,3 +1,9 @@
+function validateField(field) {
+    var el = document.getElementById(field);
+    if (el.value == '')
+        alert('Element Cannot Be blank!');
+}                   
+
 function validateForm() 
 {
 	for (var i = 0; i < document.bookForm.elements.length; i++)

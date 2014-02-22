@@ -1,7 +1,7 @@
 <?php
         require_once(dirname(__FILE__).'/../models/Book.php');
     
-	class Dao 
+	class BookDao 
 	{
 		private $mysqli;
 		private static $dao;
@@ -96,6 +96,40 @@
                     mysqli_query($this->mysqli, $sql);
                 }
 		
+                public static function printTable($books) {
+                    $out = "<table border=\"1\">";
+                    foreach ($books as $book) {
+                        $out .="<tr>";
+                            $out .="<td>";
+                                $out .= "<img src=\"http://localhost:8000/assets/images/{$book->getIsbn()}.jpg\" height=\"50\" width=\"50\"/>";
+                            $out .="</td>";
+                            
+                            $out .="<td>";
+                                $out .= $book->getTitle();
+                            $out .="</td>";
+                            
+                            $out .="<td>";
+                                $out .= $book->getIsbn();
+                            $out .="</td>";
+                            
+                            $out .="<td>";
+                                $out .= $book->getAuthor();
+                            $out .="</td>";
+                        $out .="</tr>";
+                    }
+                    
+                    $out .= "</table>";
+                    echo $out;
+                }
+                
+                public function getCategories() {
+                    $sql = "SELECT * FROM tbl_categories";
+                    $res = mysqli_query($this->mysqli, $sql);
+                    $arr = array();
+                    while (($row = mysqli_fetch_array($res, MYSQLI_ASSOC)))
+                            $arr[] = $row;
+                    return $arr;
+                }
                 /**
                  * Static public function used to return an instance of this
                  * class. It is used to ensure that only a single instance of 
@@ -109,7 +143,7 @@
 			}
 			else 
 			{
-				$dao = new Dao();
+				$dao = new BookDao();
 				return $dao;
 			}
 		}

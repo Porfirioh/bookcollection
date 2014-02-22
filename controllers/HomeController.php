@@ -6,23 +6,40 @@
  * and open the template in the editor.
  */
 
-// MOst Recent changes
-
 require_once('framework/Template.php');
 require_once(dirname(__FILE__).'/../lib/BookDao.php');
 
 class HomeController 
 {
+    public function __construct() {
+        //session_start();
+    }
     public function indexAction() 
     {
-        $tpl = new Template(VIEWS_DIR."Home/index.tpl");
-        $tpl->assign('books', Dao::getInstance()->getBooks());
+        $tpl_name = VIEWS_DIR.ucfirst($_SESSION['controller'])."/".$_SESSION['action'].".tpl";
+        $tpl = new Template($tpl_name);
+        $tpl->assign('books', BookDao::getInstance()->getBooks());
         $tpl->assign("title", "Some Books I have");
         return $tpl->asHtml();
     }
     
     public function addAction() {
-        $tpl = new Template(VIEWS_DIR."Home/add.tpl");
+        $tpl_name = VIEWS_DIR.ucfirst($_SESSION['controller'])."/".$_SESSION['action'].".tpl";
+        $tpl = new Template($tpl_name);
+        $tpl->assign('books', BookDao::getInstance()->getBooks());
+        return $tpl->asHtml();
+    }
+    
+    public function categoriesAction() {
+        $tpl_name = VIEWS_DIR.ucfirst($_SESSION['controller'])."/".$_SESSION['action'].".tpl";
+        $tpl = new Template($tpl_name);
+        $tpl->assign("categories", BookDao::getInstance()->getCategories());
+        return $tpl->asHtml();
+    }
+    
+    public function aboutAction() {
+        $tpl_name = VIEWS_DIR.ucfirst($_SESSION['controller'])."/".$_SESSION['action'].".tpl";
+        $tpl = new Template($tpl_name);
         return $tpl->asHtml();
     }
     
@@ -35,7 +52,7 @@ class HomeController
         
         $book = new Book($title, $isbn, $author, $description, $price);
         
-        Dao::getInstance()->create($book);
+        BookDao::getInstance()->create($book);
         header("Location: http://localhost:8000/index.php");
         exit();
     }

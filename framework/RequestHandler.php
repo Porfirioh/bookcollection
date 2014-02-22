@@ -11,6 +11,10 @@ define ('CONTROLLER_DIR', dirname(__FILE__).'/../controllers/');
 class RequestHandler 
 {
     public function run() {
+        
+        // start the session
+        session_start();
+        
         list ($controller, $action) = $this->parseRequest();
         if (file_exists(CONTROLLER_DIR.$controller.".php"))
             require_once(CONTROLLER_DIR.$controller.".php");
@@ -25,12 +29,15 @@ class RequestHandler
     private function parseRequest() {
         $controller = $action = "";
         if (!isset($_REQUEST['cmd'])) {
-            $controller = "home";
-            $action = "index";
+            $_SESSION['controller'] = $controller = "home";
+            $_SESSION['action'] = $action = "index";
         }
-        else
-            list ($controller, $action) = explode('/', $_REQUEST['cmd']);
-        
+        else {
+            $arr = explode('/', $_REQUEST['cmd']);
+            $_SESSION['controller'] = $arr[0];
+            $_SESSION['action'] = $arr[1];
+            list ($controller, $action) = $arr;
+        }
         return array (ucfirst($controller)."Controller", $action."Action");
     }
 }

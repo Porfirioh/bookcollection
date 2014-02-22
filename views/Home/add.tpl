@@ -1,10 +1,11 @@
-	<h1>Add Book Form</h1>
+<?php require_once(dirname(__FILE__).'/../../lib/BookDao.php'); ?>
+
+        <h1>Add Book Form</h1>
 	
-	<form method="POST" name="bookForm">
 		<table>
 			<tr>
 				<td><b>Title: </b></td>
-				<td><input type="text" name="title" size="30" id="title" onMouseOver="changeColor('title');" onMouseOut="changeColorAgain('title');"/></td>
+				<td><input type="text" name="title" size="30" id="title" onMouseOver="changeColor('title');" onMouseOut="changeColorAgain('title');" onBlur="validateField('title');"/></td>
 				<td><span id="nameErrorMsg" style="color: red; "></span></td>
 			</tr>
 			<tr>
@@ -16,6 +17,19 @@
 				<td><b>Author: </b></td>
 				<td><input type="text" name="author" size="30" id="author" onMouseOver="changeColor('author');" onMouseOut="changeColorAgain('author');"/></td>
 				<td><span id="authorErrorMsg" style="color: red; "></span></td>
+			</tr>
+                        <tr>
+				<td><b>Category: </b></td>
+                                <td>
+                                    <select name="category" id="category">
+                                        <option value="0">(Please Select A Category)</option>
+                                        <option value="1">Web Development</option>
+                                        <option value="2">Networking</option>
+                                        <option value="3">Math</option>
+                                        <option value="4">Programming</option>
+                                    </select>
+                                </td>
+				<td><span id="categoryErrorMsg" style="color: red; "></span></td>
 			</tr>
 			<tr>
 				<td><b>Description: </b></td>
@@ -32,23 +46,32 @@
                             <td><input type="submit" value="Add Book" id="addBookBt" /><!--onClick="validate()"--> </td>
 			</tr>
 		</table>
-	</form>
+        
+        <?php 
+            BookDao::printTable($books);
+        ?>
         
         <span id="status" style="display: none; font-size: 1.5em; color:green; border:1px solid black; ">Book successfully inserted</span>
         
         <script type="text/javascript">
-            /*
+            
             $(document).ready(function() {
 
                     // Validate Form -- Make sure text fields are all filled in
                     $("#addBookBt").bind('click', function() {
-                        var bookForm = $("form").serialize();
-                        $.post("http://localhost/my_apps/bookcollection/index.php?cmd=home/addBook", bookForm, function($data) {
+                        //var bookForm = $("form").serialize();
+                        $.post("http://localhost:8000/index.php?cmd=home/addBook", 
+                        {title: $("#title").val(), isbn: $("#isbn").val(), author: $("#author").val(),
+                             description: $("#description").val(), price: $("#price").val()},
+                          function($data) {
                             $("#status").text("Book Successfully added!");
+                            //$("#status").css('display' 'visible');
                         });
-
-                        //alert (bookForm);
-                        //return false;
+                        
+                        validateForm();
+                        
+                        alert (bookForm);
+                        return false;
                     });
 
                     function validateForm() 
@@ -63,5 +86,5 @@
                     }
 
             });
-            */
+            
 </script>

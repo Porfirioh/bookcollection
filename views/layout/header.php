@@ -17,7 +17,7 @@
 				<span class="masthead_title">My Book Collection</span>
 				
 				<div id="masthead_menu">
-					<a href="index.php">Home</a> | <a href="index.php?cmd=home/add">Add Book</a> |<a href="#">Categories</a> | <a href="#">About</a>
+					<a href="index.php">Home</a> | <a href="index.php?cmd=home/add">Add Book</a> |<a href="index.php?cmd=home/categories">Categories</a> | <a href="index.php?cmd=home/about">About</a>
 				</div>
 			</div>
                         
