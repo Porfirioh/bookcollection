@@ -1,18 +1,3 @@
-function validateField(field) {
-    var el = document.getElementById(field);
-    if (el.value == '')
-        alert('Element Cannot Be blank!');
-}                   
-
-function validateForm() 
-{
-	for (var i = 0; i < document.bookForm.elements.length; i++)
-		if (document.bookForm.elements[i].value == '')
-			alert ("Please Fill Out Form Field!");
-	
-	return false;
-}
-
 function validateEmail(email) 
 {
 	var email = $("#email").val();

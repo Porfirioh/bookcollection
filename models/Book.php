@@ -41,7 +41,12 @@
 			$out .= "<table>";
 				$out .= "<tr>";
 					$out .= "<td>";
-						$out .= "<img src=\"http://localhost/My_APPS/bookcollection/assets/images/".htmlentities($this->isbn).".jpg\" height=\"100\" width=\"100\" />";
+                                        
+                                            if (file_exists(dirname(__FILE__)."/../assets/images/".htmlentities($this->isbn).".jpg"))
+						$out .= "<img src=\"http://localhost:8000/assets/images/".htmlentities($this->isbn).".jpg\" height=\"100\" width=\"100\" />";
+                                            else
+                                                $out .= "<img src=\"http://localhost:8000/assets/images/unknown.jpg\" height=\"100\" width=\"100\" />";
+                                            
 					$out .= "</td>";
 					$out .= "<td>";
 						$out .= "<strong>Title: </strong>".htmlentities($this->title) . "<br/>";
@@ -54,6 +59,32 @@
 			$out .= "</table>";
 			return $out."<hr/>";
 		}
+                
+                public function toStringTableRow() {
+                    $out = "";
+                    $out .="<tr>";
+                        $out .="<td>";
+                                if (file_exists(dirname(__FILE__)."/../assets/images/".htmlentities($this->isbn).".jpg"))
+                                    $out .= "<img src=\"http://localhost:8000/assets/images/".htmlentities($this->isbn).".jpg\" height=\"50\" width=\"50\" />";
+                                else
+                                    $out .= "<img src=\"http://localhost:8000/assets/images/unknown.jpg\" height=\"50\" width=\"50\" />";
+
+                        $out .="</td>";
+
+                        $out .="<td>";
+                            $out .= $this->getTitle();
+                        $out .="</td>";
+
+                        $out .="<td>";
+                            $out .= $this->getIsbn();
+                        $out .="</td>";
+
+                        $out .="<td>";
+                            $out .= $this->getAuthor();
+                        $out .="</td>";
+                    $out .="</tr>";
+                    return $out;
+                }
 	}
 
 ?>

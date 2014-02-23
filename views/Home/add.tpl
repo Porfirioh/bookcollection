@@ -5,7 +5,7 @@
 		<table>
 			<tr>
 				<td><b>Title: </b></td>
-				<td><input type="text" name="title" size="30" id="title" onMouseOver="changeColor('title');" onMouseOut="changeColorAgain('title');" onBlur="validateField('title');"/></td>
+				<td><input type="text" name="title" size="30" id="title" onMouseOver="changeColor('title');" onMouseOut="changeColorAgain('title');" /></td>
 				<td><span id="nameErrorMsg" style="color: red; "></span></td>
 			</tr>
 			<tr>
@@ -46,18 +46,24 @@
                             <td><input type="submit" value="Add Book" id="addBookBt" /><!--onClick="validate()"--> </td>
 			</tr>
 		</table>
+
+        <span id="status" style=" font-size: 1.5em; color:green;  "></span>
         
         <?php 
             BookDao::printTable($books);
         ?>
-        
-        <span id="status" style="display: none; font-size: 1.5em; color:green; border:1px solid black; ">Book successfully inserted</span>
         
         <script type="text/javascript">
             
             $(document).ready(function() {
 
                     // Validate Form -- Make sure text fields are all filled in
+                    $("#title, #isbn, #author").bind('blur', function() {
+                        var val = $("#title").val();
+                        if (val.length == 0 || val.empty())
+                            alert ('Field Cannot Be empty!');
+                     });
+                     
                     $("#addBookBt").bind('click', function() {
                         //var bookForm = $("form").serialize();
                         $.post("http://localhost:8000/index.php?cmd=home/addBook", 
@@ -65,26 +71,10 @@
                              description: $("#description").val(), price: $("#price").val()},
                           function($data) {
                             $("#status").text("Book Successfully added!");
-                            //$("#status").css('display' 'visible');
-                        });
-                        
-                        validateForm();
-                        
-                        alert (bookForm);
+                            
+                            });
                         return false;
                     });
-
-                    function validateForm() 
-                    {
-                        passValidation = true;
-                        for (var i = 0; i < document.bookForm.elements.length; i++)
-                            if (document.bookForm.elements[i].value == '') {
-                                    alert (document.bookForm.elements[i].name.toUpperCase() + " Must be Filled Out!");
-                                    passValidation = false;
-                            }
-                        return passValidation;
-                    }
-
             });
             
 </script>

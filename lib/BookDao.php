@@ -96,32 +96,21 @@
                     mysqli_query($this->mysqli, $sql);
                 }
 		
+                /**
+                 * Creates an HTML table given an array of book objects.
+                 */
                 public static function printTable($books) {
                     $out = "<table border=\"1\">";
                     foreach ($books as $book) {
-                        $out .="<tr>";
-                            $out .="<td>";
-                                $out .= "<img src=\"http://localhost:8000/assets/images/{$book->getIsbn()}.jpg\" height=\"50\" width=\"50\"/>";
-                            $out .="</td>";
-                            
-                            $out .="<td>";
-                                $out .= $book->getTitle();
-                            $out .="</td>";
-                            
-                            $out .="<td>";
-                                $out .= $book->getIsbn();
-                            $out .="</td>";
-                            
-                            $out .="<td>";
-                                $out .= $book->getAuthor();
-                            $out .="</td>";
-                        $out .="</tr>";
+                        $out .= $book->toStringTableRow();
                     }
-                    
                     $out .= "</table>";
                     echo $out;
                 }
                 
+                /**
+                 * Finds and returns all the categories in the categories table.
+                 */
                 public function getCategories() {
                     $sql = "SELECT * FROM tbl_categories";
                     $res = mysqli_query($this->mysqli, $sql);
@@ -131,6 +120,11 @@
                     return $arr;
                 }
                 
+                /**
+                 * Queries the database and returns all the books belonging
+                 * to a particular category id (function argument).
+                 * @return type arr -- An array of books.
+                 */
                 public function findBooksByCategory($id) {
                     $sql = "SELECT * FROM tbl_books WHERE category_id={$id}";
                     $res = mysqli_query($this->mysqli, $sql);
