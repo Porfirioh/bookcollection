@@ -11,7 +11,6 @@ define ('CONTROLLER_DIR', dirname(__FILE__).'/../controllers/');
 class RequestHandler 
 {
     public function run() {
-        
         // start the session
         session_start();
         
@@ -21,6 +20,8 @@ class RequestHandler
         else {
             echo "404 - Invalid Request!!!!!!!!!!!";
         }
+
+        $_SESSION['WEB_INDEX'] = 'http://localhost:8000/index.php';
         
         $rh = new $controller;
         echo $rh->$action();

@@ -130,6 +130,17 @@
                             $arr[] = $row;
                     return $arr;
                 }
+                
+                public function findBooksByCategory($id) {
+                    $sql = "SELECT * FROM tbl_books WHERE category_id={$id}";
+                    $res = mysqli_query($this->mysqli, $sql);
+                    //$arr = array();
+                    while (($row = mysqli_fetch_array($res, MYSQLI_ASSOC)))
+                            $arr[] = new Book($row['title'], 
+                                $row['isbn'], $row['author'], stripslashes($row['description']),
+                                    $row['price']);
+                    return (isset($arr))? $arr : null;
+                }
                 /**
                  * Static public function used to return an instance of this
                  * class. It is used to ensure that only a single instance of 
