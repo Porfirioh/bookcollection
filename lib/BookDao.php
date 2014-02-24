@@ -26,7 +26,7 @@
 			//$books = array();
 			while (($row = mysqli_fetch_array($res)))
 				$books[] = new Book($row['title'], $row['isbn'],
-					$row['author'], $row['description'], $row['price']);
+					$row['author'], $row['category_id'], $row['description'], $row['price']);
 			return (isset($books))? $books : null;
 		}
                 
@@ -38,9 +38,9 @@
                 public function create($book) {
                     $book->setDescription(addslashes($book->getDescription()));
                     
-                    $sql = "INSERT INTO tbl_books (title, isbn, author, description, price) "
+                    $sql = "INSERT INTO tbl_books (title, isbn, author, description, price, category_id) "
                             . "VALUES ('".$book->getTitle()."', '".$book->getIsbn()."', "
-                            . "'".$book->getAuthor()."', '".$book->getDescription()."', '".$book->getPrice()."')";
+                            . "'".$book->getAuthor()."', '".$book->getDescription()."', '".$book->getPrice()."', '".$book->getCategory()."')";
                     mysqli_query($this->mysqli, $sql);
                     $book->setId(mysqli_insert_id($this->mysqli));
                     return $book;
@@ -62,7 +62,7 @@
                     $book = null;
                     if (isset($row)) {
                         $book = new Book($row['title'], 
-                            $row['isbn'], $row['author'], stripslashes($row['description']), $row['price']);
+                            $row['isbn'], $row['author'], $row['category_id'], stripslashes($row['description']), $row['price']);
                         $book->setId($row['id']);
                     }
                     return ($book != null)? $book : null;
@@ -74,7 +74,7 @@
                 public function update($book) {
                     $sql = "UPDATE tbl_books SET title= '".$book->getTitle()."', "
                             . "isbn= '".$book->getIsbn()."', author= '".$book->getAuthor()."',"
-                            . " description= '".$book->getDescription()."', price= '".$book->getPrice()."' "
+                            . " description= '".$book->getDescription()."', price= '".$book->getPrice()."', category_id='".$book->getAuthor()."' "
                             . "WHERE id={$book->getId()}";
                     $res = mysqli_query($this->mysqli, $sql);
                 }
@@ -131,7 +131,7 @@
                     //$arr = array();
                     while (($row = mysqli_fetch_array($res, MYSQLI_ASSOC)))
                             $arr[] = new Book($row['title'], 
-                                $row['isbn'], $row['author'], stripslashes($row['description']),
+                                $row['isbn'], $row['author'], $row['category_id'], stripslashes($row['description']),
                                     $row['price']);
                     return (isset($arr))? $arr : null;
                 }

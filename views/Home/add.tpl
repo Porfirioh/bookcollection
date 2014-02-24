@@ -57,24 +57,27 @@
             
             $(document).ready(function() {
 
-                    // Validate Form -- Make sure text fields are all filled in
-                    $("#title, #isbn, #author").bind('blur', function() {
-                        var val = $("#title").val();
-                        if (val.length == 0 || val.empty())
-                            alert ('Field Cannot Be empty!');
-                     });
-                     
                     $("#addBookBt").bind('click', function() {
-                        //var bookForm = $("form").serialize();
+                    
+                    // Validate Form -- Make sure text fields are all filled in
+                    // Basic validation, ensures none of the form fields are blank
+                        var fields = ["title", "isbn", "author", "description", "price"];
+                        for (var f in fields) {
+                            var value = $("#"+fields[f]).val();
+                            if (value.length == 0)
+                                return false;
+                        }
+                        
                         $.post("http://localhost:8000/index.php?cmd=home/addBook", 
-                        {title: $("#title").val(), isbn: $("#isbn").val(), author: $("#author").val(),
-                             description: $("#description").val(), price: $("#price").val()},
-                          function($data) {
-                            $("#status").text("Book Successfully added!");
-                            
-                            });
-                        return false;
-                    });
+                            {title: $("#title").val(), isbn: $("#isbn").val(), author: $("#author").val(),
+                                 description: $("#description").val(), price: $("#price").val(), category: $("#category").val()},
+                              function($data) {
+                                jQuery('#status').show();
+                                $("#status").text("Book Successfully added!");
+                                 setTimeout( "jQuery('#status').hide();",3000 );
+                                });
+                            return false;
+                        });
             });
             
 </script>

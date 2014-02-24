@@ -7,15 +7,17 @@
 		private $title;
 		private $isbn;
 		private $author;
+                private $category;
 		private $description;
 		private $price;
 		
 		public function __construct($title, $isbn,
-			$author, $description, $price) 
+			$author, $category, $description, $price) 
 		{
 			$this->title = $title;
 			$this->isbn = $isbn;
 			$this->author = $author;
+                        $this->category = $category;
 			$this->description = $description;
 			$this->price = $price;
 		}
@@ -35,6 +37,9 @@
                 public function setPrice($price) { $this->price = $price; }
                 public function getPrice() { return $this->price ;}
                 
+                public function setCategory($category) { $this->category = $category; }
+                public function getCategory() { return $this->category ;}
+                
 		public function __toString() {
 			$out = "";
 		
@@ -52,7 +57,7 @@
 						$out .= "<strong>Title: </strong>".htmlentities($this->title) . "<br/>";
 						$out .= "<strong>ISBN: </strong>".htmlentities($this->isbn) . "<br/>";
                                                 $out .= "<strong>Author: </strong>".htmlentities($this->author) . "<br/>";
-						$out .= "<strong>Description: </strong>".htmlentities($this->description) . "<br/>";
+						$out .= "<strong>Description: </strong><br/>".htmlentities($this->description) . "<br/>";
 						$out .= "<strong>Price: </strong>".htmlentities($this->price) . "<br/>";
 					$out .= "</td>";
 				$out .= "</tr>";
@@ -72,15 +77,15 @@
                         $out .="</td>";
 
                         $out .="<td>";
-                            $out .= $this->getTitle();
+                            $out .= htmlentities($this->title);
                         $out .="</td>";
 
                         $out .="<td>";
-                            $out .= $this->getIsbn();
+                            $out .= htmlentities($this->isbn);
                         $out .="</td>";
 
                         $out .="<td>";
-                            $out .= $this->getAuthor();
+                            $out .= htmlentities($this->author);
                         $out .="</td>";
                     $out .="</tr>";
                     return $out;

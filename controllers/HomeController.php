@@ -47,10 +47,11 @@ class HomeController
         $title = $_REQUEST['title'];
         $isbn = $_REQUEST['isbn'];
         $author = $_REQUEST['author'];
+        $category = $_REQUEST['category'];
         $description = addslashes($_REQUEST['description']);
         $price = $_REQUEST['price'];
         
-        $book = new Book($title, $isbn, $author, $description, $price);
+        $book = new Book($title, $isbn, $author, $category, $description, $price);
         
         BookDao::getInstance()->create($book);
         header("Location: http://localhost:8000/index.php");
