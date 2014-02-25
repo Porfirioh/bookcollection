@@ -47,13 +47,50 @@
 			</tr>
 		</table>
 
+        <button id="editBook">Edit Book</button>
+        
         <span id="status" style=" font-size: 1.5em; color:green;  "></span>
+        <div id="bookForm" style=""></div>
         
         <?php 
             BookDao::printTable($books);
         ?>
         
         <script type="text/javascript">
+            
+            $("#editBook").click(function() {
+                $("#bookForm").dialog({
+                    modal: true,
+                    title: 'Book Edit Form',
+                    position: 'top',
+                    show: 'fade',
+                    hide: 'fade',
+                    width: 600,
+                    close: function() {
+                        $("#bookForm").remove();
+                    },
+                    buttons: {
+                        'login': function() {
+                            $.post('login_process.php', {
+                                email: $('#email').val(),
+                                password: $('#password').val()},
+                            
+                                function(data) {
+                                    if (data == 'bad')
+                                        $.cookie('userid', null);
+                                    else
+                                        $.cookie('userid', data);
+                                    $('#bookForm').dialog('close');
+                                });
+                        },
+						
+                        'cancel': function() {
+                            $('#bookForm').dialog('close');
+                        }
+                    }
+                    
+                });
+            });
             
             $(document).ready(function() {
 

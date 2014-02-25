@@ -74,7 +74,7 @@
                 public function update($book) {
                     $sql = "UPDATE tbl_books SET title= '".$book->getTitle()."', "
                             . "isbn= '".$book->getIsbn()."', author= '".$book->getAuthor()."',"
-                            . " description= '".$book->getDescription()."', price= '".$book->getPrice()."', category_id='".$book->getAuthor()."' "
+                            . " description= '".$book->getDescription()."', price= '".$book->getPrice()."', category_id='".$book->getCategory()."' "
                             . "WHERE id={$book->getId()}";
                     $res = mysqli_query($this->mysqli, $sql);
                 }

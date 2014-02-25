@@ -2,12 +2,11 @@
 	
 	class Book 
 	{
-	
-                private $id;
+		private $id;
 		private $title;
 		private $isbn;
 		private $author;
-                private $category;
+		private $category;
 		private $description;
 		private $price;
 		
@@ -17,7 +16,7 @@
 			$this->title = $title;
 			$this->isbn = $isbn;
 			$this->author = $author;
-                        $this->category = $category;
+			$this->category = $category;
 			$this->description = $description;
 			$this->price = $price;
 		}
