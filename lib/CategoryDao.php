@@ -3,7 +3,7 @@
     
 	class CategoryDao 
 	{
-		private $mysqli;
+                private $dbh;
 		private static $dao;
 		
                 /**
@@ -11,7 +11,7 @@
                  */
 		private function __construct() 
 		{
-			$this->mysqli = mysqli_connect('localhost', 'webuser', 'password', 'demodb');	
+                    $this->dbh = new PDO($dsn="sqlite:".dirname(__FILE__)."/../data/app_db.db");
 		}
 	
                 /**
@@ -23,8 +23,9 @@
 		public function findName($catid) 
 		{
                     $sql = "SELECT name FROM tbl_categories WHERE id={$catid}";
-                    $res = mysqli_query($this->mysqli, $sql);
-                    $name = mysqli_fetch_array($res, MYSQLI_ASSOC);
+                    $STH = $this->dbh->query($sql);
+                    $STH->setFetchMode(PDO::FETCH_ASSOC);
+                    $name = $STH->fetch();
                     return (isset($name))? $name['name'] : null;
 		}
                 
@@ -36,13 +37,13 @@
                  */
 		public static function getInstance() 
 		{
-			if (isset($dao)) {
-				return $dao;
+			if (isset(self::$dao)) {
+				return self::$dao;
 			}
 			else 
 			{
-				$dao = new CategoryDao();
-				return $dao;
+				self::$dao = new CategoryDao();
+				return self::$dao;
 			}
 		}
 	}

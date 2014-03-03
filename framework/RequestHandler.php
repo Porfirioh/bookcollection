@@ -21,7 +21,12 @@ class RequestHandler
             echo "404 - Invalid Request!!!!!!!!!!!";
         }
 
-        $_SESSION['WEB_INDEX'] = 'http://localhost:8000/index.php';
+        $test = true;
+        
+        if ($test)
+            $_SESSION['WEB_INDEX'] = 'http://localhost:8000/';
+        else
+            $_SESSION['WEB_INDEX'] = "http://".$_SERVER['HTTP_HOST']."/bookcollection/";
         
         $rh = new $controller;
         echo $rh->$action();

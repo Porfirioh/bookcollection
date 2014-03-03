@@ -3,7 +3,7 @@
     
 	class BookDao 
 	{
-		private $mysqli;
+                private $dbh;
 		private static $dao;
 		
                 /**
@@ -11,7 +11,7 @@
                  */
 		private function __construct() 
 		{
-			$this->mysqli = mysqli_connect('localhost', 'webuser', 'password', 'demodb');	
+                        $this->dbh = new PDO("sqlite:".dirname(__FILE__)."/../data/app_db.db");
 		}
 	
                 /**
@@ -22,11 +22,16 @@
                  */
 		public function getBooks() 
 		{
-			$res = mysqli_query($this->mysqli, "SELECT * FROM tbl_books");
-			//$books = array();
-			while (($row = mysqli_fetch_array($res)))
-				$books[] = new Book($row['title'], $row['isbn'],
+                        $STH = $this->dbh->query('SELECT * FROM tbl_books');
+                        # setting the fetch mode
+                        $STH->setFetchMode(PDO::FETCH_ASSOC);
+                    
+			while ($row = $STH->fetch()) {
+				$book = new Book($row['title'], $row['isbn'],
 					$row['author'], $row['category_id'], $row['description'], $row['price']);
+                                $book->setId($row['id']);
+                                $books[] = $book;
+                        }
 			return (isset($books))? $books : null;
 		}
                 
@@ -41,8 +46,8 @@
                     $sql = "INSERT INTO tbl_books (title, isbn, author, description, price, category_id) "
                             . "VALUES ('".$book->getTitle()."', '".$book->getIsbn()."', "
                             . "'".$book->getAuthor()."', '".$book->getDescription()."', '".$book->getPrice()."', '".$book->getCategory()."')";
-                    mysqli_query($this->mysqli, $sql);
-                    $book->setId(mysqli_insert_id($this->mysqli));
+                    $STH = $this->dbh->query($sql);
+                    $book->setId($this->dbh->lastInsertId());
                     return $book;
                 }
 
@@ -56,11 +61,12 @@
                 
                 public function findByPrimaryKey ($pk) {
                     $sql = "SELECT * FROM tbl_books WHERE id={$pk}";
-                    $res = mysqli_query($this->mysqli, $sql);
-                    $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+                    $STH = $this->dbh->query($sql);
+                    $STH->setFetchMode(PDO::FETCH_ASSOC);
+                    $row = $STH->fetch();
                     
                     $book = null;
-                    if (isset($row)) {
+                    if ($row != FALSE) {
                         $book = new Book($row['title'], 
                             $row['isbn'], $row['author'], $row['category_id'], stripslashes($row['description']), $row['price']);
                         $book->setId($row['id']);
@@ -76,7 +82,7 @@
                             . "isbn= '".$book->getIsbn()."', author= '".$book->getAuthor()."',"
                             . " description= '".$book->getDescription()."', price= '".$book->getPrice()."', category_id='".$book->getCategory()."' "
                             . "WHERE id={$book->getId()}";
-                    $res = mysqli_query($this->mysqli, $sql);
+                    $STH = $this->dbh->query($sql);
                 }
                 
                 /**
@@ -84,7 +90,7 @@
                  */
                 public function delete($book) {
                     $sql = "DELETE FROM tbl_books WHERE id = '".$book->getId()."'";
-                    mysqli_query($this->mysqli, $sql);
+                    $STH = $this->dbh->query($sql);
                 }
 
 
@@ -93,7 +99,7 @@
                  * @param type $sql -- SQL statement to be executed.
                  */
                 public function sql($sql) {
-                    mysqli_query($this->mysqli, $sql);
+                    $this->dbh->query($sql);
                 }
 		
                 /**
@@ -113,9 +119,10 @@
                  */
                 public function getCategories() {
                     $sql = "SELECT * FROM tbl_categories";
-                    $res = mysqli_query($this->mysqli, $sql);
+                    $STH = $this->dbh->query($sql);
+                    $STH->setFetchMode(PDO::FETCH_ASSOC);
                     $arr = array();
-                    while (($row = mysqli_fetch_array($res, MYSQLI_ASSOC)))
+                    while ($row = $STH->fetch())
                             $arr[] = $row;
                     return $arr;
                 }
@@ -127,9 +134,10 @@
                  */
                 public function findBooksByCategory($id) {
                     $sql = "SELECT * FROM tbl_books WHERE category_id={$id}";
-                    $res = mysqli_query($this->mysqli, $sql);
+                    $STH = $this->dbh->query($sql);
+                    $STH->setFetchMode(PDO::FETCH_ASSOC);
                     //$arr = array();
-                    while (($row = mysqli_fetch_array($res, MYSQLI_ASSOC)))
+                    while ($row = $STH->fetch())
                             $arr[] = new Book($row['title'], 
                                 $row['isbn'], $row['author'], $row['category_id'], stripslashes($row['description']),
                                     $row['price']);
@@ -143,13 +151,13 @@
                  */
 		public static function getInstance() 
 		{
-			if (isset($dao)) {
-				return $dao;
+			if (isset(self::$dao)) {
+				return self::$dao;
 			}
 			else 
 			{
-				$dao = new BookDao();
-				return $dao;
+				self::$dao = new BookDao();
+				return self::$dao;
 			}
 		}
 	}

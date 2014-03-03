@@ -24,7 +24,7 @@
         public function testCreateBook() 
         {
             // create book
-            $book = new Book("Secrets of the Javascript Ninja", "123-456789", "John Resig", "Probably the best book about"
+            $book = new Book("Secrets of the Javascript Ninja", "123-456789", "John Resig", 3, "Probably the best book about"
                     . " javascript that I have read. Recommended for masterful javascript programmers.", 39.99);
             BookDao::getInstance()->create($book);
             
@@ -60,7 +60,7 @@
         
         public function testDelete() {
             // create book
-            $book = new Book("Starting Java EE 6 With GlassFish", "123-456789", "Antonio Goncalves", "A great book about Java EE 6."
+            $book = new Book("Starting Java EE 6 With GlassFish", "123-456789", "Antonio Goncalves", 1, "A great book about Java EE 6."
                 . " Well-written and intended for all audiences. The book provides a lot of great examples.", 49.99);
             $book = BookDao::getInstance()->create($book);
         

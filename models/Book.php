@@ -47,9 +47,9 @@
 					$out .= "<td>";
                                         
                                             if (file_exists(dirname(__FILE__)."/../assets/images/".htmlentities($this->isbn).".jpg"))
-						$out .= "<img src=\"http://localhost:8000/assets/images/".htmlentities($this->isbn).".jpg\" height=\"100\" width=\"100\" />";
+						$out .= "<img src=\"{$_SESSION['WEB_INDEX']}assets/images/".htmlentities($this->isbn).".jpg\" height=\"100\" width=\"100\" />";
                                             else
-                                                $out .= "<img src=\"http://localhost:8000/assets/images/unknown.jpg\" height=\"100\" width=\"100\" />";
+                                                $out .= "<img src=\"{$_SESSION['WEB_INDEX']}assets/images/unknown.jpg\" height=\"100\" width=\"100\" />";
                                             
 					$out .= "</td>";
 					$out .= "<td>";
@@ -69,9 +69,9 @@
                     $out .="<tr>";
                         $out .="<td>";
                                 if (file_exists(dirname(__FILE__)."/../assets/images/".htmlentities($this->isbn).".jpg"))
-                                    $out .= "<img src=\"http://localhost:8000/assets/images/".htmlentities($this->isbn).".jpg\" height=\"50\" width=\"50\" />";
+                                    $out .= "<img src=\"{$_SESSION['WEB_INDEX']}assets/images/".htmlentities($this->isbn).".jpg\" height=\"50\" width=\"50\" />";
                                 else
-                                    $out .= "<img src=\"http://localhost:8000/assets/images/unknown.jpg\" height=\"50\" width=\"50\" />";
+                                    $out .= "<img src=\"{$_SESSION['WEB_INDEX']}assets/images/unknown.jpg\" height=\"50\" width=\"50\" />";
 
                         $out .="</td>";
 
@@ -86,8 +86,21 @@
                         $out .="<td>";
                             $out .= htmlentities($this->author);
                         $out .="</td>";
+                        $out .="<td>";
+                             $out .= "<button id=\"editBook\" onclick=\"editBookForm('$this->id')\">Edit Book</button>";
+                        $out .="</td>";
                     $out .="</tr>";
                     return $out;
+                }
+                
+                public function getJsonRepresentation() {
+                    $arr = array();
+                    $arr['title'] = $this->title;
+                    $arr['isbn'] = $this->isbn;
+                    $arr['author'] = $this->author;
+                    $arr['description'] = $this->description;
+                    $arr['price'] = $this->price;
+                    return $arr;
                 }
 	}
 

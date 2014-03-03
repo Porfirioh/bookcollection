@@ -58,6 +58,15 @@ class HomeController
         exit();
     }
     
+    public function getBookAction() {
+        $arr = array();
+        $book = BookDao::getInstance()->findByPrimaryKey($pk=$_REQUEST['id']);
+        
+        //$arr['name'] = 'Daman Camara';
+        //echo json_encode($arr);
+        echo json_encode($book->getJsonRepresentation());
+    }
+    
 }
 
 
